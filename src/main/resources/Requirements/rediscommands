@@ -1,0 +1,13 @@
+- it will install wsl if not exist, otherwise it launches.
+wsl --install
+
+- to know the status of redis server
+systemctl status redis-server
+
+ - To see created keys in Redis
+ redis-cli
+ keys *
+
+
+
+
