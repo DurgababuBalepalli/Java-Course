@@ -17,7 +17,7 @@ public class FIPDetailsRepository {
     /**
      * In this scenario redisTemplate stores data in Redis Hash. So Retrieves from Redis Hash everytime. we havenot kept data till now at Cache.
      * For every retreival data will be fetched from Redis Hash not from the Cache.
-     * In order aquire data from Cache you have to use @cachable and @cashing anotations.
+     * In order aquire data from Cache you have to use @Enablecaching and @cashing anotations.
      */
     public FIPDetails saveFIPDetails(FIPDetails fipDetails) {
         redisTemplate.opsForHash().put(redisHashKey,fipDetails.getFipId(),fipDetails);
@@ -29,6 +29,7 @@ public class FIPDetailsRepository {
     }
 
     public FIPDetails getFIPDetailsByFIPId(Integer fipId) {
+        System.out.println("Data will be Returned from Redis Hash first time only to keep in Cache...Spring will cache it");
         return (FIPDetails) redisTemplate.opsForHash().get(redisHashKey,fipId);
     }
 
