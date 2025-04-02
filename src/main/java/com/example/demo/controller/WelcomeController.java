@@ -22,12 +22,10 @@ public class WelcomeController {
      * This method alone can't restrict access. it just gives an access.
      * you should required security config class.there you have to bypass this method.
      * iam talking about below one
-     *          @Configuration
+     * @Configuration
      *          @EnableWebSecurity
      *          @EnableMethodSecurity
      *          public class SecurityConfiguration {}
-     *
-     *
      */
     @PostMapping("/authenticate")
     public String authenticationToken(@RequestBody AuthUserDTO authUserDTO) {
