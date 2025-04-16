@@ -1,0 +1,17 @@
+// in order to use external jars, first you have to register and then you have to add in pom.xml
+
+mvn install:install-file -Dfile=D:\Self_Learning_and_Projects\RestTemplate_Comminication\PointOfSale\src\main\java\com\example\demo\common_jars\item.jar -DgroupId=com.example -DartifactId=item -Dversion=1.0 -Dpackaging=jar
+mvn install:install-file -Dfile=D:\Self_Learning_and_Projects\RestTemplate_Comminication\PointOfSale\src\main\java\com\example\demo\common_jars\inventory.jar -DgroupId=com.example -DartifactId=inventory -Dversion=1.0 -Dpackaging=jar
+
+//Add in Pom.xml
+<dependency>
+    <groupId>com.example</groupId>
+    <artifactId>item</artifactId>
+    <version>1.0</version>
+</dependency>
+
+<dependency>
+    <groupId>com.example</groupId>
+    <artifactId>inventory</artifactId>
+    <version>1.0</version>
+</dependency>
