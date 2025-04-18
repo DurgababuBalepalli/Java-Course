@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,18 @@ public class ItemController {
     }
 
     @GetMapping("/getAllItems")
-    public ResponseEntity<List<Item>> getAllUsers(){
-        return ResponseEntity.ok(itemService.getAllItems());
+    public ResponseEntity<List<ItemResponseDTO>> getAllUsers(){
+        List<ItemResponseDTO> itemResponseDTOList = new ArrayList<>();
+        List<Item> itemList = itemService.getAllItems();
+        if (!itemList.isEmpty()) {
+            for (Item item : itemList) {
+                ItemResponseDTO itemResponseDTO = new ItemResponseDTO();
+                itemResponseDTO.setId(item.getId());
+                itemResponseDTO.setName(item.getName());
+
+                itemResponseDTOList.add(itemResponseDTO);
+            }
+        }
+        return ResponseEntity.ok(itemResponseDTOList);
     }
 }

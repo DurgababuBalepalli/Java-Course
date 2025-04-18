@@ -4,11 +4,16 @@ import com.example.demo.async_methods.AsyncFetchService;
 import com.example.demo.dto.ItemResponseDTO;
 import com.example.demo.dto.PointOfSaleResponseDTO;
 import com.example.demo.dto.StockResponseDTO;
+import com.lowagie.text.Document;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -54,5 +59,27 @@ public class PointOfSaleService {
         return pointOfSaleResponseDTO;
     }
 
+    public void getItemDataPdf() throws FileNotFoundException, ExecutionException, InterruptedException {
+        Document document = new Document();
+        String filePath = "D:\\Self_Learning_and_Projects\\Multhi_Threading_Spring_boot\\item-data.pdf";
+
+        PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        CompletableFuture<List<ItemResponseDTO>> itemResponseDTOListCompletableFuture = asyncFetchService.getAllItemListAsync();
+        List<ItemResponseDTO> itemResponseDTOList = itemResponseDTOListCompletableFuture.get();
+
+        document.open();
+        if (!itemResponseDTOList.isEmpty()) {
+            for (ItemResponseDTO itemResponseDTO : itemResponseDTOList) {
+                document.add(new Paragraph("Item ID: " + itemResponseDTO.getId()));
+                document.add(new Paragraph("Item Name: " + itemResponseDTO.getName()));
+                document.add(new Paragraph("-----------------------------"));
+            }
+        } else {
+            document.add(new Paragraph("No item data available."));
+        }
+        document.close();
+
+        System.out.println("PDF generated successfully at: " + filePath);
+    }
 
 }
