@@ -23,6 +23,11 @@ public class PointOfSaleService {
 
     public PointOfSaleResponseDTO getPointOfSaleDataByItemId(String itemId) {
 
+        /**
+         * In this perticular execution 1 Thread will be used.First Thread will call item service wait for response, then again
+         * same thread calls inventory service and waits for response. after got response same thread will prepare response and
+         * give it back. So we have to call parallally for better response time. Refer multi threading project.
+         */
         String itemUrl = ITEM_SERVICE_BASE_URL + "/getItemById/" + itemId;
         ItemResponseDTO itemResponseDTO = restTemplate.getForObject(itemUrl, ItemResponseDTO.class);
 
