@@ -39,6 +39,19 @@ public class ItemController {
         return ResponseEntity.ok(itemResponseDTO);
     }
 
+    @GetMapping("/getItemByName/{name}")
+    public ResponseEntity<ItemResponseDTO> getItemByName(@PathVariable("name") String itemName) {
+        ItemResponseDTO itemResponseDTO = new ItemResponseDTO();
+        try {
+            Item item = itemService.getItemByName(itemName);
+            itemResponseDTO.setId(item.getId());
+            itemResponseDTO.setName(item.getName());
+        } catch (Exception e) {
+            logger.error("unable to access Item Data...");
+        }
+        return ResponseEntity.ok(itemResponseDTO);
+    }
+
     @GetMapping("/getAllItems")
     public ResponseEntity<List<ItemResponseDTO>> getAllUsers(){
         List<ItemResponseDTO> itemResponseDTOList = new ArrayList<>();

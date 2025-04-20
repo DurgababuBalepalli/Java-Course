@@ -23,10 +23,21 @@ public class PointOfSaleController {
     private PointOfSaleService pointOfSaleService;
 
     @GetMapping("/getPointOfSaleDataByItemId/{id}")
-    public ResponseEntity<PointOfSaleResponseDTO> getItemById(@PathVariable("id") String itemId) {
+    public ResponseEntity<PointOfSaleResponseDTO> getPointOfSaleDataByItemId(@PathVariable("id") String itemId) {
         PointOfSaleResponseDTO pointOfSaleResponseDTO = null;
         try {
             pointOfSaleResponseDTO = pointOfSaleService.getPointOfSaleDataByItemId(itemId);
+        } catch (Exception e) {
+            logger.error("unable to access Item Data...");
+        }
+        return ResponseEntity.ok(pointOfSaleResponseDTO);
+    }
+
+    @GetMapping("/getPointOfSaleDataByItemName/{itemName}")
+    public ResponseEntity<PointOfSaleResponseDTO> getPointOfSaleDataByItemName(@PathVariable("itemName") String itemName) {
+        PointOfSaleResponseDTO pointOfSaleResponseDTO = null;
+        try {
+            pointOfSaleResponseDTO = pointOfSaleService.getPointOfSaleDataByItemName(itemName);
         } catch (Exception e) {
             logger.error("unable to access Item Data...");
         }

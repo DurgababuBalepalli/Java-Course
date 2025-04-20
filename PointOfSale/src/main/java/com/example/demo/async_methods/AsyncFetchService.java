@@ -27,8 +27,8 @@ public class AsyncFetchService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final String ITEM_SERVICE_BASE_URL = "http://localhost:8081/api/item";
-    private static final String INVENTORY_SERVICE_BASE_URL = "http://localhost:8082/api/stock";
+    public static final String ITEM_SERVICE_BASE_URL = "http://localhost:8081/api/item";
+    public static final String INVENTORY_SERVICE_BASE_URL = "http://localhost:8082/api/stock";
 
     @Async("externalServiceExecutor")
     public CompletableFuture<ItemResponseDTO> getItemByIdAsync(String itemId) {

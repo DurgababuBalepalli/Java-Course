@@ -18,6 +18,11 @@ public class ItemService {
         return item;
     }
 
+    public Item getItemByName(String itemName) {
+        Item item =  itemRepository.getItemByName(itemName).orElse(null);
+        return item;
+    }
+
     public List<Item> getAllItems() {
         return itemRepository.findAll();
     }

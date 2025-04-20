@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static com.example.demo.async_methods.AsyncFetchService.ITEM_SERVICE_BASE_URL;
+
 @Service
 public class PointOfSaleService {
 
@@ -26,6 +28,9 @@ public class PointOfSaleService {
 
     @Autowired
     private AsyncFetchService asyncFetchService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public PointOfSaleResponseDTO getPointOfSaleDataByItemId(String itemId) throws ExecutionException, InterruptedException {
 
@@ -80,6 +85,28 @@ public class PointOfSaleService {
         document.close();
 
         System.out.println("PDF generated successfully at: " + filePath);
+    }
+
+    /**
+     * In Previous one we have used @Async.Now we are going to use CompletableFuture.supplyAysnc
+     * Concept wise both are same,for using @Async spring is required for CompletableFuture.supplyAysnc you can use anywhere inside the method
+     * @Async Uses Spring's @EnableAsync and task executor and CompletableFuture.supplyAysnc Uses ForkJoinPool.commonPool (or custom executor if given)
+     * Make note that if you provide Executor for CompletableFuture.supplyAysnc, it will use Thread pool, not fork join pool.
+     */
+    public PointOfSaleResponseDTO getPointOfSaleDataByItemName(String itemName) {
+        CompletableFuture<ItemResponseDTO> itemFuture = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Fetching ItemName on Thread : " + Thread.currentThread().getName());
+            String itemUrl = ITEM_SERVICE_BASE_URL + "/getItemByName/" + itemName;
+            return restTemplate.getForObject(itemUrl, ItemResponseDTO.class);
+        });
+
+        // Wait for the async result (blocking)
+        ItemResponseDTO itemResponseDTO = itemFuture.join(); // or .get() with exception handling
+
+        PointOfSaleResponseDTO pointOfSaleResponseDTO = new PointOfSaleResponseDTO();
+        pointOfSaleResponseDTO.setItemId(itemResponseDTO.getId());
+        pointOfSaleResponseDTO.setItemName(itemResponseDTO.getName());
+        return pointOfSaleResponseDTO;
     }
 
 }
